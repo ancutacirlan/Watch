@@ -1,9 +1,6 @@
-package com.example.WatchNext.services;
+package com.example.WatchNext.security.services;
 
-import com.example.WatchNext.model.Role;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public interface RoleService {

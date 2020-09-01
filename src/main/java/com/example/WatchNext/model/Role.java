@@ -11,12 +11,8 @@ public class Role {
     private Long id;
     @Column
     private String name;
-    @Column(name="is_admin")
+    //@Column(name="is_admin")
     private Boolean isAdmin;
-
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "role")
-//     private Users users;
-
 
     public Role(String name, Boolean isAdmin) {
         this.name = name;

@@ -1,18 +1,17 @@
-package com.example.WatchNext.services;
+package com.example.WatchNext.security.services;
 
 import com.example.WatchNext.model.Role;
 import com.example.WatchNext.model.Users;
 import com.example.WatchNext.repositories.RoleRepository;
-import com.example.WatchNext.repositories.UsersRepository;
+import com.example.WatchNext.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsersServiceImpl implements UsersService {
 
     private @Autowired
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     private @Autowired
     RoleRepository roleRepository;
@@ -20,20 +19,18 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void saveDefaultUser() {
-        long count=usersRepository.count();
+        long count=userRepository.count();
         if (count==0)
         {
             Role role = roleRepository.findByName("Admin");
             System.out.println(role.toString());
             Users user = new Users();
-            user.setName("Admin principal");
+            user.setUsername("Admin principal");
             user.setEmail("admin@admin.ro");
-            user.setPassword_hash("1234");
-
+            user.setPassword("1234");
             user.setRole(role);
-
             System.out.println(user);
-            usersRepository.save(user);
+            userRepository.save(user);
 
         }
     }

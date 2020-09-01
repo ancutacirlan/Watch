@@ -1,10 +1,7 @@
 package com.example.WatchNext;
 
-import com.example.WatchNext.model.Role;
-import com.example.WatchNext.model.Users;
-import com.example.WatchNext.repositories.RoleRepository;
-import com.example.WatchNext.services.RoleService;
-import com.example.WatchNext.services.UsersService;
+import com.example.WatchNext.security.services.RoleService;
+import com.example.WatchNext.security.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,6 +25,6 @@ public class WatchNextApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		roleService.saveDefaultRoles();
-		usersService.saveDefaultUser();
+		//usersService.saveDefaultUser();
 	}
 }

@@ -1,12 +1,9 @@
-package com.example.WatchNext.services;
+package com.example.WatchNext.security.services;
 
 import com.example.WatchNext.model.Role;
 import com.example.WatchNext.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class RoleServiceImpl implements RoleService{
@@ -17,11 +14,10 @@ public class RoleServiceImpl implements RoleService{
     @Override
     public void saveDefaultRoles() {
         long count=roleRepository.count();
-        System.out.println(count);
         if (count==0)
         {
-            roleRepository.save(new Role("Admin",true));
-            roleRepository.save(new Role("User",false));
+            roleRepository.save(new Role("ROLE_ADMIN",true));
+            roleRepository.save(new Role("ROLE_USER",false));
         }
     }
 

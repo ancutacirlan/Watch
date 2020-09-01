@@ -1,7 +1,5 @@
 package com.example.WatchNext.model;
 
-import net.bytebuddy.description.type.TypeList;
-
 import javax.persistence.*;
 
 @Entity
@@ -13,38 +11,46 @@ public class Users {
     private Long id;
 
     @Column
-    private String name;
+    private String username;
 
     @Column
     private String email;
 
     @Column
-    private String password_hash;
+    private String password;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name = "role_id")
-
     private Role role;
-
-    public Users(String name, String email, String password_hash, Role role) {
-        this.name = name;
-        this.email = email;
-        this.password_hash = password_hash;
-        this.role = role;
-    }
-
 
     public Users() {
 
     }
 
-
-    public String getName() {
-        return name;
+    public Users(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        //this.role = role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -55,12 +61,12 @@ public class Users {
         this.email = email;
     }
 
-    public String getPassword_hash() {
-        return password_hash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassword_hash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Role getRole() {
@@ -69,16 +75,5 @@ public class Users {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "Users{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password_hash='" + password_hash + '\'' +
-                ", role=" + role +
-                '}';
     }
 }
