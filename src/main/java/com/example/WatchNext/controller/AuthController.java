@@ -27,6 +27,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -83,13 +84,11 @@ public class AuthController {
         String strRoles = signUpRequest.getRole();
         if (strRoles == null || strRoles.equals("user")) {
             Role userRole = roleRepository.findByName("ROLE_USER");
-        user.setRole(userRole);}
-        else if (strRoles.equals("admin"))
-        {
+            user.setRole(userRole);
+        } else if (strRoles.equals("admin")) {
             Role adminRole = roleRepository.findByName("ROLE_ADMIN");
             user.setRole(adminRole);
-        }
-        else
+        } else
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Role is not found"));

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
@@ -13,11 +14,16 @@ public class TestController {
 		return "Public Content.";
 	}
 
-
 	@GetMapping("/user")
-	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String userAccess() {
-		return "User Content.";
+		return "USER Content.";
+	}
+
+	@GetMapping("/user1")
+	@PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
+	public String user1Access() {
+		return "USER and ADMIN Content.";
 	}
 
 
@@ -26,5 +32,4 @@ public class TestController {
 	public String adminAccess() {
 		return "Admin Board.";
 	}
-
 }

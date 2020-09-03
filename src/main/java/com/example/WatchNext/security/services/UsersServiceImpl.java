@@ -22,7 +22,7 @@ public class UsersServiceImpl implements UsersService {
         long count=userRepository.count();
         if (count==0)
         {
-            Role role = roleRepository.findByName("Admin");
+            Role role = roleRepository.findByName("ROLE_ADMIN");
             System.out.println(role.toString());
             Users user = new Users();
             user.setUsername("Admin principal");
