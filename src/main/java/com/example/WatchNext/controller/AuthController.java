@@ -10,6 +10,7 @@ import com.example.WatchNext.payload.response.MessageResponse;
 import com.example.WatchNext.repositories.UserRepository;
 import com.example.WatchNext.security.jwt.JwtUtils;
 import com.example.WatchNext.security.services.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +35,7 @@ public class AuthController {
     private SendEmail sendEmail;
     private GeneratePassword generatePassword;
 
-
+    @Autowired
     public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserRepository userRepository,
                           PasswordEncoder encoder, SendEmail sendEmail, GeneratePassword generatePassword) {
         this.authenticationManager = authenticationManager;
@@ -70,12 +71,9 @@ public class AuthController {
         if (userRepository.existsByEmail(resetPasswordRequest.getEmail())) {
             Users users = userRepository.findByEmail(resetPasswordRequest.getEmail());
             String password = generatePassword.generateRandomPassword();
-            System.out.println(password);
             if (generatePassword.isPasswordValid(password)) {
-                System.out.println(users.getPassword());
                 users.setPassword(encoder.encode(password));
                 userRepository.save(users);
-                System.out.println(users.getPassword());
                 sendEmail.sendMail(users.getEmail(), "Reset password", password);
             }
             return ResponseEntity.ok(new MessageResponse(

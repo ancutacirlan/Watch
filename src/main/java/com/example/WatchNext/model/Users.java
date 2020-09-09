@@ -34,8 +34,6 @@ public class Users {
     }
 
 
-
-
     public Long getId() {
         return id;
     }

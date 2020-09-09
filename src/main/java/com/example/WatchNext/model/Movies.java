@@ -2,6 +2,7 @@ package com.example.WatchNext.model;
 
 import com.sun.istack.NotNull;
 import org.hibernate.validator.constraints.URL;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,7 +31,7 @@ public class Movies {
     Date releaseDate;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="movies_categories",
+    @JoinTable(name = "movies_categories",
             joinColumns = @JoinColumn(name = "movies_id"),
             inverseJoinColumns = @JoinColumn(name = "categories_id"))
     private List<Categories> categories = new ArrayList<>();

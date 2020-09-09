@@ -8,6 +8,7 @@ import com.example.WatchNext.payload.response.MessageResponse;
 import com.example.WatchNext.repositories.CategoryRepository;
 import com.example.WatchNext.security.services.CategoryService;
 import com.example.WatchNext.security.services.CategoryServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +23,7 @@ public class CategoryController {
     private CategoryRepository categoryRepository;
     private CategoryService categoryService;
 
-
+    @Autowired
     public CategoryController(CategoryServiceImpl categoryService, CategoryRepository categoryRepository) {
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
@@ -53,7 +54,7 @@ public class CategoryController {
         if (val.isPresent())
             return ResponseEntity.ok(val.get());
         else
-            return new ResponseEntity(new MessageResponse("category does not exist"),HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new MessageResponse("category does not exist"), HttpStatus.NOT_FOUND);
 
     }
 

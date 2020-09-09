@@ -8,6 +8,7 @@ import com.example.WatchNext.payload.response.MovieResponse;
 import com.example.WatchNext.repositories.CategoryRepository;
 import com.example.WatchNext.repositories.MovieRepository;
 import com.example.WatchNext.security.services.MovieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class MovieController {
     private MovieRepository movieRepository;
     private CategoryRepository categoryRepository;
 
+    @Autowired
     public MovieController(MovieService movieService, MovieRepository movieRepository,
                            CategoryRepository categoryRepository) {
         this.movieService = movieService;
@@ -78,36 +80,35 @@ public class MovieController {
         try {
 
 
-        Movies movies = new Movies(movieRequest.getTitle(), movieRequest.getTrailerURL(),
-                movieRequest.getOriginalSourceUrl(), movieRequest.getCoverUrl(), movieRequest.getImdbld(),
-                movieRequest.getImdbScore(), movieRequest.getDescription(), movieRequest.getReleaseDate());
+            Movies movies = new Movies(movieRequest.getTitle(), movieRequest.getTrailerURL(),
+                    movieRequest.getOriginalSourceUrl(), movieRequest.getCoverUrl(), movieRequest.getImdbld(),
+                    movieRequest.getImdbScore(), movieRequest.getDescription(), movieRequest.getReleaseDate());
 
-        List<String> strCategories = movieRequest.getCategories();
-        List<Categories> categories = new ArrayList<>();
+            List<String> strCategories = movieRequest.getCategories();
+            List<Categories> categories = new ArrayList<>();
 
-        if (strCategories.isEmpty()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Categories not found"));
-        } else
-            strCategories.forEach(category -> {
-                if (categoryRepository.existsByName(category)) {
-                    Categories categories1 = categoryRepository.findByName(category);
-                    categories.add(categories1);
-                }
-            });
+            if (strCategories.isEmpty()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Categories not found"));
+            } else
+                strCategories.forEach(category -> {
+                    if (categoryRepository.existsByName(category)) {
+                        Categories categories1 = categoryRepository.findByName(category);
+                        categories.add(categories1);
+                    }
+                });
 
-        if (categories.isEmpty())
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Categories not found"));
-        else {
-            movies.setCategories(categories);
-            movieRepository.save(movies);
-            return ResponseEntity.ok(new MovieResponse(movies));
-        }
-        }
-        catch (Exception exception) {
+            if (categories.isEmpty())
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Categories not found"));
+            else {
+                movies.setCategories(categories);
+                movieRepository.save(movies);
+                return ResponseEntity.ok(new MovieResponse(movies));
+            }
+        } catch (Exception exception) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Bad request"));
         }
@@ -118,15 +119,14 @@ public class MovieController {
     @RequestMapping("/query")
     public ResponseEntity<?> getMovie(@RequestParam Integer limit, @RequestParam Integer skip,
                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate,
-                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate)
-    {
+                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate) {
 
         System.out.println(fromDate);
         List<Movies> allMovies = movieRepository.findAll();
 
         List<Movies> filterMovies = allMovies
                 .stream()
-                .filter(movie->movie.getReleaseDate().after(fromDate) && movie.getReleaseDate().before(toDate))
+                .filter(movie -> movie.getReleaseDate().after(fromDate) && movie.getReleaseDate().before(toDate))
                 .skip(skip)
                 .limit(limit)
                 .collect(Collectors.toList());

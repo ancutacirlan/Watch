@@ -1,5 +1,6 @@
 package com.example.WatchNext.security.jwt;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ public class SendEmail {
 
     private JavaMailSender javaMailSender;
 
+    @Autowired
     public SendEmail(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }

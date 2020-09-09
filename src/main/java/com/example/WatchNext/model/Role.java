@@ -12,7 +12,7 @@ public class Role {
     private Long id;
     @Column
     private String name;
-    @Column(name="is_admin")
+    @Column(name = "is_admin")
     private Boolean isAdmin;
 
     public Role(String name, Boolean isAdmin) {

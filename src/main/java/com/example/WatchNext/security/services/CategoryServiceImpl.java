@@ -2,6 +2,7 @@ package com.example.WatchNext.security.services;
 
 import com.example.WatchNext.model.Categories;
 import com.example.WatchNext.repositories.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;
 
+    @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
