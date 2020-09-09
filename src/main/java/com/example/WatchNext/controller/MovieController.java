@@ -8,13 +8,16 @@ import com.example.WatchNext.payload.response.MovieResponse;
 import com.example.WatchNext.repositories.CategoryRepository;
 import com.example.WatchNext.repositories.MovieRepository;
 import com.example.WatchNext.security.services.MovieService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -31,8 +34,6 @@ public class MovieController {
         this.movieRepository = movieRepository;
         this.categoryRepository = categoryRepository;
     }
-
-
 
     @GetMapping
     @RequestMapping("/{id}")
@@ -56,6 +57,7 @@ public class MovieController {
             return ResponseEntity.ok(HttpStatus.OK);
         } else
             return new ResponseEntity(HttpStatus.NOT_FOUND);
+
 
     }
 
@@ -101,6 +103,27 @@ public class MovieController {
             return ResponseEntity.ok(new MovieResponse(movies));
         }
 
+    }
+
+    @GetMapping
+    @RequestMapping("/query")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getMovie(@RequestParam Integer limit, @RequestParam Integer skip,
+                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate,
+                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate)
+    {
+
+        System.out.println(fromDate);
+        List<Movies> allMovies = movieRepository.findAll();
+
+        List<Movies> filterMovies = allMovies
+                .stream()
+                .filter(movie->movie.getReleaseDate().after(fromDate) && movie.getReleaseDate().before(toDate))
+                .skip(skip)
+                .limit(limit)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(filterMovies);
     }
 
 

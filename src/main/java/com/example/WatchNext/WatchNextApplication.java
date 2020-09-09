@@ -9,6 +9,6 @@ public class WatchNextApplication{
 	public static void main(String[] args) {
 		SpringApplication.run(WatchNextApplication.class, args);
 
-	}
 
+	}
 }
