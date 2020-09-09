@@ -25,11 +25,12 @@ import java.util.stream.Collectors;
 public class MovieController {
 
 
-    MovieService movieService;
-    MovieRepository movieRepository;
-    CategoryRepository categoryRepository;
+    private MovieService movieService;
+    private MovieRepository movieRepository;
+    private CategoryRepository categoryRepository;
 
-    public MovieController(MovieService movieService, MovieRepository movieRepository, CategoryRepository categoryRepository) {
+    public MovieController(MovieService movieService, MovieRepository movieRepository,
+                           CategoryRepository categoryRepository) {
         this.movieService = movieService;
         this.movieRepository = movieRepository;
         this.categoryRepository = categoryRepository;
@@ -74,6 +75,9 @@ public class MovieController {
                     .body(movies.getOriginalSourceUrl());
         }
 
+        try {
+
+
         Movies movies = new Movies(movieRequest.getTitle(), movieRequest.getTrailerURL(),
                 movieRequest.getOriginalSourceUrl(), movieRequest.getCoverUrl(), movieRequest.getImdbld(),
                 movieRequest.getImdbScore(), movieRequest.getDescription(), movieRequest.getReleaseDate());
@@ -102,12 +106,16 @@ public class MovieController {
             movieRepository.save(movies);
             return ResponseEntity.ok(new MovieResponse(movies));
         }
-
+        }
+        catch (Exception exception) {
+            return ResponseEntity.badRequest()
+                    .body(new MessageResponse("Bad request"));
+        }
     }
+
 
     @GetMapping
     @RequestMapping("/query")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getMovie(@RequestParam Integer limit, @RequestParam Integer skip,
                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate,
                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate)

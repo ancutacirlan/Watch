@@ -19,8 +19,8 @@ import java.util.List;
 @RequestMapping("/api/category")
 public class CategoryController {
 
-    CategoryRepository categoryRepository;
-    CategoryService categoryService;
+    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
 
     public CategoryController(CategoryServiceImpl categoryService, CategoryRepository categoryRepository) {

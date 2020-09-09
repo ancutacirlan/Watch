@@ -25,6 +25,9 @@ dependencies {
 	compile group: 'org.flywaydb', name: 'flyway-core', version: '6.5.5'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.3.3.RELEASE'
 	compile group: 'org.passay', name: 'passay', version: '1.6.0'
+	compile group: 'commons-validator', name: 'commons-validator', version: '1.7'
+	compile group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.0.Alpha6'
+	compile group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

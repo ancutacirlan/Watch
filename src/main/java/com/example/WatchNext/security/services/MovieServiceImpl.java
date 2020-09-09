@@ -4,7 +4,6 @@ import com.example.WatchNext.model.Movies;
 import com.example.WatchNext.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,12 +20,6 @@ public class MovieServiceImpl implements MovieService{
         return movieRepository.findById(id);
     }
 
-    @Override
-    public List<Movies> getAllMovies() {
-        List<Movies> movies = (List<Movies>) movieRepository.findAll();
-
-        return movies;
-    }
 
     @Override
     public void deleteMovieById(Long id) {

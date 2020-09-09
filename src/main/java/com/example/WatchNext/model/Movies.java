@@ -1,10 +1,11 @@
 package com.example.WatchNext.model;
 
-
 import com.sun.istack.NotNull;
-
+import org.hibernate.validator.constraints.URL;
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Movies {
@@ -13,8 +14,11 @@ public class Movies {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @URL
     private String trailerURL;
+    @URL
     private String originalSourceUrl;
+    @URL
     private String coverUrl;
 
     @NotNull

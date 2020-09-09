@@ -3,6 +3,7 @@ package com.example.WatchNext.model;
 
 import javax.persistence.*;
 
+
 @Entity
 public class Role {
 
