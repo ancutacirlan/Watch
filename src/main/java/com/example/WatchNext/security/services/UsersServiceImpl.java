@@ -4,18 +4,20 @@ import com.example.WatchNext.model.Role;
 import com.example.WatchNext.model.Users;
 import com.example.WatchNext.repositories.RoleRepository;
 import com.example.WatchNext.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsersServiceImpl implements UsersService {
 
-    private @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+    private RoleRepository roleRepository;
+    private JavaMailSender javaMailSender;
 
-    private @Autowired
-    RoleRepository roleRepository;
-
+    public UsersServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+    }
 
     @Override
     public void saveDefaultUser() {
@@ -34,4 +36,5 @@ public class UsersServiceImpl implements UsersService {
 
         }
     }
+
 }

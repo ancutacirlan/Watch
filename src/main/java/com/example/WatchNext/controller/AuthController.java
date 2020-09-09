@@ -1,16 +1,15 @@
 package com.example.WatchNext.controller;
 
-import com.example.WatchNext.model.Role;
 import com.example.WatchNext.model.Users;
+import com.example.WatchNext.security.jwt.GeneratePassword;
 import com.example.WatchNext.payload.request.LoginRequest;
-import com.example.WatchNext.payload.request.SignupRequest;
+import com.example.WatchNext.payload.request.ResetPasswordRequest;
+import com.example.WatchNext.security.jwt.SendEmail;
 import com.example.WatchNext.payload.response.JwtResponse;
 import com.example.WatchNext.payload.response.MessageResponse;
-import com.example.WatchNext.repositories.RoleRepository;
 import com.example.WatchNext.repositories.UserRepository;
 import com.example.WatchNext.security.jwt.JwtUtils;
 import com.example.WatchNext.security.services.UserDetailsImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,20 +27,23 @@ import java.util.Collection;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+    private JwtUtils jwtUtils;
+    private UserRepository userRepository;
+    private PasswordEncoder encoder;
+    private SendEmail sendEmail;
+    private GeneratePassword generatePassword;
 
-    @Autowired
-    UserRepository userRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
+    public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserRepository userRepository,
+                          PasswordEncoder encoder, SendEmail sendEmail, GeneratePassword generatePassword) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+        this.userRepository = userRepository;
+        this.encoder = encoder;
+        this.sendEmail = sendEmail;
+        this.generatePassword = generatePassword;
+    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -62,38 +64,30 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
-        }
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> registerUser(@RequestBody ResetPasswordRequest resetPasswordRequest) {
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
+        if (userRepository.existsByEmail(resetPasswordRequest.getEmail())) {
+            Users users = userRepository.findByEmail(resetPasswordRequest.getEmail());
+            String password = generatePassword.generateRandomPassword();
+            System.out.println(password);
+            if (generatePassword.isPasswordValid(password)) {
+                System.out.println(users.getPassword());
+                users.setPassword(encoder.encode(password));
+                userRepository.save(users);
+                System.out.println(users.getPassword());
+                sendEmail.sendMail(users.getEmail(), "Reset password", password);
+            }
+            return ResponseEntity.ok(new MessageResponse(
+                    "Password reset was successful"));
 
-        // Create new user's account
-        Users user = new Users(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        String strRoles = signUpRequest.getRole();
-        if (strRoles == null || strRoles.equals("user")) {
-            Role userRole = roleRepository.findByName("ROLE_USER");
-            user.setRole(userRole);
-        } else if (strRoles.equals("admin")) {
-            Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-            user.setRole(adminRole);
         } else
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Role is not found"));
-        userRepository.save(user);
+                    .body(new MessageResponse("Error: Email not found!"));
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+
     }
+
+
 }

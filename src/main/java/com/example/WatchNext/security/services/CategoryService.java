@@ -10,6 +10,6 @@ public interface CategoryService {
 
     Optional<Categories> findById(Long id);
 
-    public List<Categories> getAll();
+    List<Categories> getAll();
 
 }

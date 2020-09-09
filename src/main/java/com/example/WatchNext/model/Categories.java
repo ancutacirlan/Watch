@@ -12,7 +12,6 @@ public class Categories {
 
     @Column(unique = true,nullable = false)
     private String name;
-
     public Categories(){
 
     }
