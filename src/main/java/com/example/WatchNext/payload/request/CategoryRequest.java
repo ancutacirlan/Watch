@@ -5,7 +5,6 @@ public class CategoryRequest {
     private String name;
     private Long id;
 
-
     public CategoryRequest() {
     }
 

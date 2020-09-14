@@ -1,13 +1,12 @@
 package com.example.WatchNext.repositories;
 
-import com.example.WatchNext.model.Movies;
+import com.example.WatchNext.model.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MovieRepository extends JpaRepository<Movies, Long> {
+import java.util.Optional;
 
-    Boolean existsByImdbld(String imdbld);
+public interface MovieRepository extends JpaRepository<Movie, Long> {
 
-    Movies findByImdbld(String imdbld);
-
+    Optional<Movie> findByImdbld(String imdbld);
 
 }

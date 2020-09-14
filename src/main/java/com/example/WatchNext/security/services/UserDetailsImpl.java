@@ -1,6 +1,6 @@
 package com.example.WatchNext.security.services;
 
-import com.example.WatchNext.model.Users;
+import com.example.WatchNext.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,12 +13,10 @@ import java.util.Objects;
 
 
 public class UserDetailsImpl implements UserDetails {
+
 	private static final long serialVersionUID = 1L;
-
 	private Long id;
-
 	private String username;
-
 	private String email;
 
 	@JsonIgnore
@@ -35,7 +33,7 @@ public class UserDetailsImpl implements UserDetails {
 		this.authorities = authorities;
 	}
 
-	public static UserDetailsImpl build(Users user) {
+	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName()));
 
 		return new UserDetailsImpl(

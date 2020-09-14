@@ -1,7 +1,7 @@
 package com.example.WatchNext.controller;
 
 import com.example.WatchNext.model.Role;
-import com.example.WatchNext.model.Users;
+import com.example.WatchNext.model.User;
 import com.example.WatchNext.payload.request.SignupRequest;
 import com.example.WatchNext.payload.response.MessageResponse;
 import com.example.WatchNext.repositories.RoleRepository;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder encoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder encoder;
 
     @Autowired
     public UserController(UserRepository userRepository,
@@ -41,7 +41,7 @@ public class UserController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        Users user = new Users(signUpRequest.getUsername(),
+        User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 

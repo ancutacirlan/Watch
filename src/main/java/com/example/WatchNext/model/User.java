@@ -1,33 +1,33 @@
 package com.example.WatchNext.model;
-
 import javax.persistence.*;
 
 @Entity
-public class Users {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "id",unique = true, nullable = false)
     private Long id;
 
-    @Column
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column
+    @Column(name = "password", nullable = false)
     private String password;
 
     @OneToOne()
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    public Users() {
+    public User() {
 
     }
 
-    public Users(String username, String email, String password) {
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;

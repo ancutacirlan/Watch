@@ -1,20 +1,20 @@
 package com.example.WatchNext.payload.response;
 
-import com.example.WatchNext.model.Movies;
+import com.example.WatchNext.model.Movie;
 
 public class MovieResponse {
 
-    private Movies movies;
+    private Movie movies;
 
-    public MovieResponse(Movies movies) {
+    public MovieResponse(Movie movies) {
         this.movies = movies;
     }
 
-    public Movies getMovies() {
+    public Movie getMovies() {
         return movies;
     }
 
-    public void setMovies(Movies movies) {
+    public void setMovies(Movie movies) {
         this.movies = movies;
     }
 }

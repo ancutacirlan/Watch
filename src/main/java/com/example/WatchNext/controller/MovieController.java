@@ -1,21 +1,14 @@
 package com.example.WatchNext.controller;
 
-import com.example.WatchNext.model.Categories;
-import com.example.WatchNext.model.Movies;
+import com.example.WatchNext.model.Movie;
 import com.example.WatchNext.payload.request.MovieRequest;
-import com.example.WatchNext.payload.response.MessageResponse;
-import com.example.WatchNext.payload.response.MovieResponse;
-import com.example.WatchNext.repositories.CategoryRepository;
-import com.example.WatchNext.repositories.MovieRepository;
 import com.example.WatchNext.security.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,106 +18,44 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/movie")
 public class MovieController {
 
-
-    private MovieService movieService;
-    private MovieRepository movieRepository;
-    private CategoryRepository categoryRepository;
+    private final MovieService movieService;
 
     @Autowired
-    public MovieController(MovieService movieService, MovieRepository movieRepository,
-                           CategoryRepository categoryRepository) {
+    public MovieController(MovieService movieService) {
         this.movieService = movieService;
-        this.movieRepository = movieRepository;
-        this.categoryRepository = categoryRepository;
-    }
-
-    @GetMapping
-    @RequestMapping("/{id}")
-    public ResponseEntity<?> getMovieById(@PathVariable Long id) {
-
-        var val = movieService.findMoviesById(id);
-        if (val.isPresent())
-            return ResponseEntity.ok(val.get());
-        else
-            return new ResponseEntity(new MessageResponse("Movies does not exist"), HttpStatus.NOT_FOUND);
 
     }
 
-    @DeleteMapping
-    @RequestMapping("delete/{id}")
+    @GetMapping("/{id}")
+    public Movie getMovieById(@PathVariable Long id) {
+        var movie = movieService.findMovieById(id);
+        return movie;
+    }
+
+    @DeleteMapping("delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteMovieById(@PathVariable Long id) {
-        var val = movieService.findMoviesById(id);
-        if (val.isPresent()) {
-            movieService.deleteMovieById(id);
-            return ResponseEntity.ok(HttpStatus.OK);
-        } else
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-
-
+    public void deleteMovieById(@PathVariable Long id) {
+        movieService.deleteMovieById(id);
     }
 
 
-    @PostMapping
-    @RequestMapping("/post")
+    @PostMapping("/post")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> addMovies(@RequestBody MovieRequest movieRequest) {
-
-        if (movieRepository.existsByImdbld(movieRequest.getImdbld())) {
-            Movies movies = movieRepository.findByImdbld(movieRequest.getImdbld());
-            return ResponseEntity
-                    .badRequest()
-                    .body(movies.getOriginalSourceUrl());
-        }
-
-        try {
-
-
-            Movies movies = new Movies(movieRequest.getTitle(), movieRequest.getTrailerURL(),
-                    movieRequest.getOriginalSourceUrl(), movieRequest.getCoverUrl(), movieRequest.getImdbld(),
-                    movieRequest.getImdbScore(), movieRequest.getDescription(), movieRequest.getReleaseDate());
-
-            List<String> strCategories = movieRequest.getCategories();
-            List<Categories> categories = new ArrayList<>();
-
-            if (strCategories.isEmpty()) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("Categories not found"));
-            } else
-                strCategories.forEach(category -> {
-                    if (categoryRepository.existsByName(category)) {
-                        Categories categories1 = categoryRepository.findByName(category);
-                        categories.add(categories1);
-                    }
-                });
-
-            if (categories.isEmpty())
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("Categories not found"));
-            else {
-                movies.setCategories(categories);
-                movieRepository.save(movies);
-                return ResponseEntity.ok(new MovieResponse(movies));
-            }
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Bad request"));
-        }
+    public ResponseEntity<Movie> addMovies(@RequestBody MovieRequest movieRequest) {
+        var val = movieService.findMovieByImdbld(movieRequest.getImdbld())
+                .orElse(movieService.saveMovie(movieRequest));
+        return ResponseEntity.ok(val);
     }
 
 
-    @GetMapping
-    @RequestMapping("/query")
+    @GetMapping("/query")
     public ResponseEntity<?> getMovie(@RequestParam Integer limit, @RequestParam Integer skip,
                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate,
                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate) {
 
-        System.out.println(fromDate);
-        List<Movies> allMovies = movieRepository.findAll();
+        List<Movie> allMovies = movieService.findAllMovies();
 
-        List<Movies> filterMovies = allMovies
+        List<Movie> filterMovies = allMovies
                 .stream()
                 .filter(movie -> movie.getReleaseDate().after(fromDate) && movie.getReleaseDate().before(toDate))
                 .skip(skip)
@@ -133,6 +64,5 @@ public class MovieController {
 
         return ResponseEntity.ok(filterMovies);
     }
-
 
 }

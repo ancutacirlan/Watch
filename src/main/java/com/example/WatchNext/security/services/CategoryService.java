@@ -1,15 +1,14 @@
 package com.example.WatchNext.security.services;
 
-import com.example.WatchNext.model.Categories;
+import com.example.WatchNext.model.Category;
+import com.example.WatchNext.payload.request.CategoryRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CategoryService {
 
-
-    Optional<Categories> findById(Long id);
-
-    List<Categories> getAll();
-
+    Object findById(Long id);
+    List<Category> getAll();
+    Category findByName(String name);
+    Category save (CategoryRequest categoryRequest);
 }

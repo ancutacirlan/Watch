@@ -1,8 +1,8 @@
 package com.example.WatchNext.payload.request;
 
 public class LoginRequest {
-    private String username;
 
+    private String username;
     private String password;
 
     public String getUsername() {

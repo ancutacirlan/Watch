@@ -9,37 +9,53 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Movies {
+@Table(name = "movie")
+public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id",unique = true, nullable = false)
     private Long id;
+
+    @Column(name = "title", unique = true, nullable = false)
     private String title;
+
     @URL
-    private String trailerURL;
+    @Column(name = "trailer_url", nullable = false, unique = true)
+    private String trailerUrl;
+
     @URL
+    @Column(name = "original_source_url", nullable = false, unique = true)
     private String originalSourceUrl;
+
     @URL
+    @Column(name = "cover_url", nullable = false, unique = true)
     private String coverUrl;
 
+    @Column(name = "imdbld", nullable = false)
     @NotNull
-    String imdbld;
-    Float imdbScore;
-    String description;
+    private String imdbld;
+
+    @Column(name = "imdb_score", nullable = false)
+    private Float imdbScore;
+
+    @Column(name = "description")
+    private String description;
 
     @NotNull
-    Date releaseDate;
+    @Column(name = "release_date", nullable = false)
+    private Date releaseDate;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "movies_categories",
-            joinColumns = @JoinColumn(name = "movies_id"),
-            inverseJoinColumns = @JoinColumn(name = "categories_id"))
+    @JoinTable(name = "movie_category",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories = new ArrayList<>();
 
-    public Movies(String title, String trailerURL, String originalSourceUrl, String coverUrl, String imdbld,
-                  Float imdbScore, String description, Date releaseDate) {
+    public Movie(String title, String trailerUrl, String originalSourceUrl, String coverUrl, String imdbld,
+                 Float imdbScore, String description, Date releaseDate) {
         this.title = title;
-        this.trailerURL = trailerURL;
+        this.trailerUrl = trailerUrl;
         this.originalSourceUrl = originalSourceUrl;
         this.coverUrl = coverUrl;
         this.imdbld = imdbld;
@@ -48,7 +64,7 @@ public class Movies {
         this.releaseDate = releaseDate;
     }
 
-    public Movies() {
+    public Movie() {
     }
 
     public List<Category> getCategories() {
@@ -75,12 +91,12 @@ public class Movies {
         this.title = title;
     }
 
-    public String getTrailerURL() {
-        return trailerURL;
+    public String getTrailerUrl() {
+        return trailerUrl;
     }
 
-    public void setTrailerURL(String trailerURL) {
-        this.trailerURL = trailerURL;
+    public void setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
     }
 
     public String getOriginalSourceUrl() {
@@ -130,5 +146,6 @@ public class Movies {
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
+
 
 }

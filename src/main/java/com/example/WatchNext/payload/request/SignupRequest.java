@@ -4,11 +4,8 @@ package com.example.WatchNext.payload.request;
 public class SignupRequest {
 
     private String username;
-
     private String email;
-
     private String role;
-
     private String password;
 
     public String getUsername() {

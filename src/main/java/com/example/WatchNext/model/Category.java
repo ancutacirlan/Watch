@@ -1,23 +1,23 @@
 package com.example.WatchNext.model;
-
-
 import javax.persistence.*;
 
 @Entity
-public class Categories {
+@Table(name = "category")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id",unique = true, nullable = false)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    public Categories() {
+    public Category() {
 
     }
 
-    public Categories(String name) {
+    public Category(String name) {
         this.name = name;
     }
 

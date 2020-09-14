@@ -1,26 +1,22 @@
 package com.example.WatchNext.controller;
 
-import com.example.WatchNext.model.Users;
-import com.example.WatchNext.security.jwt.GeneratePassword;
+import com.example.WatchNext.model.User;
 import com.example.WatchNext.payload.request.LoginRequest;
 import com.example.WatchNext.payload.request.ResetPasswordRequest;
-import com.example.WatchNext.security.jwt.SendEmail;
 import com.example.WatchNext.payload.response.JwtResponse;
 import com.example.WatchNext.payload.response.MessageResponse;
 import com.example.WatchNext.repositories.UserRepository;
+import com.example.WatchNext.security.jwt.GeneratePassword;
 import com.example.WatchNext.security.jwt.JwtUtils;
-import com.example.WatchNext.security.services.UserDetailsImpl;
+import com.example.WatchNext.security.jwt.SendEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -28,12 +24,12 @@ import java.util.Collection;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private AuthenticationManager authenticationManager;
-    private JwtUtils jwtUtils;
-    private UserRepository userRepository;
-    private PasswordEncoder encoder;
-    private SendEmail sendEmail;
-    private GeneratePassword generatePassword;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+    private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
+    private final SendEmail sendEmail;
+    private final GeneratePassword generatePassword;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserRepository userRepository,
@@ -47,35 +43,25 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        Collection<? extends GrantedAuthority> roles = userDetails.getAuthorities();
-
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles));
+        return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> registerUser(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+    public ResponseEntity<MessageResponse> registerUser(@RequestBody ResetPasswordRequest resetPasswordRequest) {
 
         if (userRepository.existsByEmail(resetPasswordRequest.getEmail())) {
-            Users users = userRepository.findByEmail(resetPasswordRequest.getEmail());
+            User users = userRepository.findByEmail(resetPasswordRequest.getEmail());
             String password = generatePassword.generateRandomPassword();
-            if (generatePassword.isPasswordValid(password)) {
-                users.setPassword(encoder.encode(password));
-                userRepository.save(users);
-                sendEmail.sendMail(users.getEmail(), "Reset password", password);
-            }
+            users.setPassword(encoder.encode(password));
+            userRepository.save(users);
+            sendEmail.sendMail(users.getEmail(), "Reset password", password);
             return ResponseEntity.ok(new MessageResponse(
                     "Password reset was successful"));
 
