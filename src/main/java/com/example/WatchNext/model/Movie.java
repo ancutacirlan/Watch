@@ -34,7 +34,7 @@ public class Movies {
     @JoinTable(name = "movies_categories",
             joinColumns = @JoinColumn(name = "movies_id"),
             inverseJoinColumns = @JoinColumn(name = "categories_id"))
-    private List<Categories> categories = new ArrayList<>();
+    private List<Category> categories = new ArrayList<>();
 
     public Movies(String title, String trailerURL, String originalSourceUrl, String coverUrl, String imdbld,
                   Float imdbScore, String description, Date releaseDate) {
@@ -51,11 +51,11 @@ public class Movies {
     public Movies() {
     }
 
-    public List<Categories> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Categories> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 
