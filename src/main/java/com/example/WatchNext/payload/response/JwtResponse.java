@@ -16,6 +16,4 @@ public class JwtResponse {
         this.token = accessToken;
     }
 
-
-
 }

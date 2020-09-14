@@ -27,9 +27,9 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public Movie getMovieById(@PathVariable Long id) {
+    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
         var movie = movieService.findMovieById(id);
-        return movie;
+        return ResponseEntity.ok(movie);
     }
 
     @DeleteMapping("delete/{id}")

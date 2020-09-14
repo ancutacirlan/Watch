@@ -1,4 +1,5 @@
 package com.example.WatchNext.model;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,7 +8,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
     @Column(name = "name", unique = true, nullable = false)
@@ -36,4 +37,5 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+
 }

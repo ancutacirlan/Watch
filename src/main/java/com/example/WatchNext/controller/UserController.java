@@ -1,64 +1,37 @@
 package com.example.WatchNext.controller;
 
-import com.example.WatchNext.model.Role;
-import com.example.WatchNext.model.User;
 import com.example.WatchNext.payload.request.SignupRequest;
 import com.example.WatchNext.payload.response.MessageResponse;
-import com.example.WatchNext.repositories.RoleRepository;
-import com.example.WatchNext.repositories.UserRepository;
+import com.example.WatchNext.security.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder encoder;
+
+    private final AuthService authService;
 
     @Autowired
-    public UserController(UserRepository userRepository,
-                          RoleRepository roleRepository, PasswordEncoder encoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.encoder = encoder;
+    public UserController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+        if (authService.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity.badRequest()
+                    .body(new MessageResponse("Error: Username or email is already taken!"));
+        }
+        if (authService.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity.badRequest().
+                    body(new MessageResponse("Error: Username or email is already taken!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
-
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        String strRoles = signUpRequest.getRole();
-        if (strRoles == null || strRoles.equals("user")) {
-            Role userRole = roleRepository.findByName("ROLE_USER");
-            user.setRole(userRole);
-        } else if (strRoles.equals("admin")) {
-            Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-            user.setRole(adminRole);
-        } else
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Role is not found"));
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        var val = authService.register(signUpRequest);
+        return ResponseEntity.ok(new MessageResponse(val));
     }
 }
 

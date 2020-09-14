@@ -14,7 +14,7 @@ public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
     @Column(name = "title", unique = true, nullable = false)
@@ -50,7 +50,7 @@ public class Movie {
     @JoinTable(name = "movie_category",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Category> categories = new ArrayList<>();
+    private List<Category> categories = new ArrayList<Category>();
 
     public Movie(String title, String trailerUrl, String originalSourceUrl, String coverUrl, String imdbld,
                  Float imdbScore, String description, Date releaseDate) {
@@ -146,6 +146,5 @@ public class Movie {
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
-
 
 }

@@ -1,11 +1,13 @@
 package com.example.WatchNext.payload.request;
 
 
+import com.example.WatchNext.model.Role;
+
 public class SignupRequest {
 
     private String username;
     private String email;
-    private String role;
+    private Role role;
     private String password;
 
     public String getUsername() {
@@ -32,11 +34,12 @@ public class SignupRequest {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
+
 }

@@ -25,21 +25,22 @@ public class CategoryController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> addCategory(@RequestBody CategoryRequest categoryRequest) {
-        var saveCategory = categoryService.save(categoryRequest);
-        return ResponseEntity.ok(saveCategory);
+        var category = categoryService.findCategoryByName(categoryRequest.getName())
+                .orElse(categoryService.save(categoryRequest));
+        return ResponseEntity.ok(category);
     }
 
 
     @GetMapping("/{id}")
-    public Object getCategoryById(@PathVariable Long id) {
-        var val = categoryService.findById(id);
-        return val;
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
+        var category = categoryService.findCategoryById(id);
+        return ResponseEntity.ok(category);
     }
 
     @GetMapping
-    public List<Category> getAllCategories() {
+    public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> categories = categoryService.getAll();
-        return categories;
+        return ResponseEntity.ok(categories);
     }
 
 }

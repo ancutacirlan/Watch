@@ -23,4 +23,5 @@ public class CategoryRequest {
     public void setName(String name) {
         this.name = name;
     }
+
 }

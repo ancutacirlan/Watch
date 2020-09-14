@@ -1,4 +1,5 @@
 package com.example.WatchNext.model;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,7 +8,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
     @Column(name = "username", unique = true, nullable = false)
@@ -73,4 +74,5 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
 }

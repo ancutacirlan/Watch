@@ -17,4 +17,5 @@ public class MovieResponse {
     public void setMovies(Movie movies) {
         this.movies = movies;
     }
+
 }

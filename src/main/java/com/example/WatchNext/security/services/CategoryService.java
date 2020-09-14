@@ -4,11 +4,16 @@ import com.example.WatchNext.model.Category;
 import com.example.WatchNext.payload.request.CategoryRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryService {
 
-    Object findById(Long id);
+    Category findCategoryById(Long id);
+
     List<Category> getAll();
-    Category findByName(String name);
-    Category save (CategoryRequest categoryRequest);
+
+    Category save(CategoryRequest categoryRequest);
+
+    Optional<Category> findCategoryByName(String name);
+
 }

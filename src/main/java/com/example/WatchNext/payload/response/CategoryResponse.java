@@ -10,5 +10,4 @@ public class CategoryResponse {
         this.category = category;
     }
 
-
 }

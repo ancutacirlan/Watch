@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SendEmail {
 
-
     private final JavaMailSender javaMailSender;
 
     @Autowired

@@ -1,4 +1,5 @@
 package com.example.WatchNext.model;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,14 +8,14 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "name",unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @Column(name = "is_admin")
-    private Boolean isAdmin=false;
+    private Boolean isAdmin = false;
 
     public Role(String name, Boolean isAdmin) {
         this.name = name;
@@ -24,6 +25,7 @@ public class Role {
     public Role() {
 
     }
+
     public void setName(String name) {
         this.name = name;
     }

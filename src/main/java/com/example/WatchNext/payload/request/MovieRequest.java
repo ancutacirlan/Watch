@@ -1,5 +1,7 @@
 package com.example.WatchNext.payload.request;
 
+import com.example.WatchNext.model.Category;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,8 +15,8 @@ public class MovieRequest {
     private String imdbld;
     private Float imdbScore;
     private String description;
-    private  Date releaseDate;
-    private List<String> categories = new ArrayList<>();
+    private Date releaseDate;
+    private List<Category> categories = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -80,11 +82,12 @@ public class MovieRequest {
         this.releaseDate = releaseDate;
     }
 
-    public List<String> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<String> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
+
 }
