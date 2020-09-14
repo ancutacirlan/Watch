@@ -1,6 +1,5 @@
 package com.example.WatchNext.security.services;
 
-import com.example.WatchNext.model.Role;
 import com.example.WatchNext.model.User;
 import com.example.WatchNext.payload.request.LoginRequest;
 import com.example.WatchNext.payload.request.ResetPasswordRequest;
@@ -28,17 +27,19 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final SendEmail sendEmail;
     private final GeneratePassword generatePassword;
+    private final RoleService roleService;
 
     @Autowired
     public AuthServiceImpl(AuthenticationManager authenticationManager, JwtUtils jwtUtils,
                            UserRepository userRepository, PasswordEncoder encoder, SendEmail sendEmail,
-                           GeneratePassword generatePassword) {
+                           GeneratePassword generatePassword, RoleService roleService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.sendEmail = sendEmail;
         this.generatePassword = generatePassword;
+        this.roleService = roleService;
     }
 
 
@@ -69,7 +70,8 @@ public class AuthServiceImpl implements AuthService {
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
-        Role role = signUpRequest.getRole();
+        String strRoles = signUpRequest.getRole();
+        var role = roleService.findRoleByName(strRoles);
         user.setRole(role);
         userRepository.save(user);
         return "User registered successfully!";

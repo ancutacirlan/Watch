@@ -1,8 +1,13 @@
 package com.example.WatchNext.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name = "role")
 public class Role {
 
@@ -20,43 +25,5 @@ public class Role {
     public Role(String name, Boolean isAdmin) {
         this.name = name;
         this.isAdmin = isAdmin;
-    }
-
-    public Role() {
-
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Boolean getAdmin() {
-        return isAdmin;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setAdmin(Boolean admin) {
-        isAdmin = admin;
-    }
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", isAdmin=" + isAdmin +
-                '}';
     }
 }
