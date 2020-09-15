@@ -1,12 +1,14 @@
 package com.example.WatchNext.security.jwt;
 
-import org.passay.*;
-import org.springframework.stereotype.Component;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Service
 public class GeneratePassword {
 
     public String generateRandomPassword() {

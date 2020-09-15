@@ -2,7 +2,6 @@ package com.example.WatchNext.security.services;
 
 import com.example.WatchNext.model.User;
 import com.example.WatchNext.payload.request.LoginRequest;
-import com.example.WatchNext.payload.request.ResetPasswordRequest;
 import com.example.WatchNext.payload.request.SignupRequest;
 import com.example.WatchNext.repositories.UserRepository;
 import com.example.WatchNext.security.jwt.GeneratePassword;
@@ -53,16 +52,12 @@ public class AuthServiceImpl implements AuthService {
         return jwt;
     }
 
-
-    public void resetPass(ResetPasswordRequest resetPasswordRequest) {
-        String user = findUserByEmail(resetPasswordRequest.getEmail()).stream().map(user1 -> {
+    @Override
+    public void resetPass(User user) {
             String password = generatePassword.generateRandomPassword();
-            user1.setPassword(encoder.encode(password));
-            userRepository.save(user1);
-            sendEmail.sendMail(user1.getEmail(), "Reset password", password);
-            return "Password reset was successful";
-        }).findFirst()
-                .orElse("Email not found");
+            user.setPassword(encoder.encode(password));
+            userRepository.save(user);
+            sendEmail.sendMail(user.getEmail(), "Reset password", password);
     }
 
     @Override

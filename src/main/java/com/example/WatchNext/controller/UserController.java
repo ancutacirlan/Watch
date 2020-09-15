@@ -23,11 +23,11 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
         if (authService.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Error: Username or email is already taken!"));
+                    .body(new MessageResponse("Error: Username is already taken!"));
         }
         if (authService.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.badRequest().
-                    body(new MessageResponse("Error: Username or email is already taken!"));
+                    body(new MessageResponse("Error: Email is already taken!"));
         }
 
         var val = authService.register(signUpRequest);

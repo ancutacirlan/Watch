@@ -33,7 +33,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        var category = categoryService.findCategoryById(id);
+        var category = categoryService.findCategoryById(id).stream().findFirst().get();
         return ResponseEntity.ok(category);
     }
 
