@@ -10,11 +10,11 @@ public interface MovieService {
 
     void deleteMovieById(Long id);
 
-    Movie findMovieById(Long id);
+    Optional<Movie> findMovieById(Long id);
 
     Optional<Movie> findMovieByImdbld(String imdbld);
 
-    Movie saveMovie(MovieRequest movieRequest);
+    Movie saveMovie(Movie movie);
 
     List<Movie> findAllMovies();
 

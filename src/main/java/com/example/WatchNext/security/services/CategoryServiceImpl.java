@@ -27,14 +27,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getAll() {
-        List<Category> categories = (List<Category>) categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
         return categories;
     }
 
 
     @Override
-    public Category save(CategoryRequest categoryRequest) {
-        Category saveCategory = new Category(categoryRequest.getName());
+    public Category save(Category category) {
+        Category saveCategory = new Category(category.getName());
         categoryRepository.save(saveCategory);
         return saveCategory;
     }

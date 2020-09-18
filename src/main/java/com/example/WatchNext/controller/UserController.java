@@ -1,11 +1,16 @@
 package com.example.WatchNext.controller;
 
+import com.example.WatchNext.model.User;
+import com.example.WatchNext.payload.request.ResetPasswordRequest;
 import com.example.WatchNext.payload.request.SignupRequest;
 import com.example.WatchNext.payload.response.MessageResponse;
 import com.example.WatchNext.security.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -32,6 +37,18 @@ public class UserController {
 
         var val = authService.register(signUpRequest);
         return ResponseEntity.ok(new MessageResponse(val));
+    }
+
+
+    @PostMapping("/reset-password")
+    public void resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        Optional<User> val = authService.findUserByEmail(resetPasswordRequest.getEmail());
+        val.ifPresentOrElse(
+                user -> {
+                    authService.resetPass(user);
+                    new ResponseEntity(HttpStatus.OK);
+                },
+                () -> new ResponseEntity(HttpStatus.BAD_REQUEST));
     }
 }
 

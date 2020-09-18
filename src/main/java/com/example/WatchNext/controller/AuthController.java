@@ -32,15 +32,4 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
-
-    @PostMapping("/reset-password")
-    public void resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
-        Optional<User> val = authService.findUserByEmail(resetPasswordRequest.getEmail());
-        val.ifPresentOrElse(
-                user -> {
-                    authService.resetPass(user);
-                    new ResponseEntity(HttpStatus.OK);
-                },
-                () -> new ResponseEntity(HttpStatus.BAD_REQUEST));
-    }
 }

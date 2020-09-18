@@ -22,20 +22,18 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     public MovieServiceImpl(MovieRepository movieRepository, CategoryRepository categoryRepository) {
         this.movieRepository = movieRepository;
-
         this.categoryRepository = categoryRepository;
     }
 
 
     @Override
     public void deleteMovieById(Long id) {
-        var movie = findMovieById(id);
         movieRepository.deleteById(id);
     }
 
     @Override
-    public Movie findMovieById(Long id) {
-        return movieRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public Optional<Movie> findMovieById(Long id) {
+        return movieRepository.findById(id);
     }
 
     @Override
@@ -44,20 +42,9 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie saveMovie(MovieRequest movieRequest) {
-        Movie newMovie = new Movie(movieRequest.getTitle(), movieRequest.getTrailerURL(),
-                movieRequest.getOriginalSourceUrl(), movieRequest.getCoverUrl(), movieRequest.getImdbld(),
-                movieRequest.getImdbScore(), movieRequest.getDescription(), movieRequest.getReleaseDate());
-        List<String> categories = movieRequest.getCategories();
-        List<Category> movieCategories = new ArrayList<>();
-        categories.forEach(category -> {
-            var addCategory = categoryRepository.findByName(category).stream().findFirst().get();
-            movieCategories.add(addCategory);
-        });
-
-        newMovie.setCategories(movieCategories);
-        movieRepository.save(newMovie);
-        return newMovie;
+    public Movie saveMovie(Movie movie) {
+        movieRepository.save(movie);
+        return movie;
     }
 
     @Override
