@@ -1,10 +1,7 @@
 package com.example.WatchNext.controller;
 
 import com.example.WatchNext.model.Category;
-import com.example.WatchNext.payload.request.CategoryRequest;
 import com.example.WatchNext.security.services.CategoryService;
-import com.example.WatchNext.security.services.CategoryServiceImpl;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/category")
@@ -21,7 +17,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryServiceImpl categoryService) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
@@ -37,7 +33,7 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
         var category = categoryService.findCategoryById(id).map(category1 ->
-        {return ResponseEntity.ok().body(category1);}).orElseThrow(EntityNotFoundException::new);
+                ResponseEntity.ok().body(category1)).orElseThrow(EntityNotFoundException::new);
        return category;
     }
 

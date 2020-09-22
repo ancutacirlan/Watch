@@ -2,7 +2,6 @@ package com.example.WatchNext.controller;
 
 import com.example.WatchNext.model.Category;
 import com.example.WatchNext.model.Movie;
-import com.example.WatchNext.payload.request.MovieRequest;
 import com.example.WatchNext.security.services.CategoryService;
 import com.example.WatchNext.security.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,9 +32,9 @@ public class MovieController {
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
         var movie = movieService.findMovieById(id).
-                map(movie1 -> {
-                    return ResponseEntity.ok(movie1);
-                })
+                map(movie1 ->
+                    ResponseEntity.ok().body(movie1)
+                )
                 .orElseThrow(EntityNotFoundException::new);
         return movie;
     }
@@ -56,19 +54,9 @@ public class MovieController {
 
     @PostMapping("/post")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Movie> addMovies(@RequestBody MovieRequest movieRequest) {
-        Movie newMovie = new Movie(movieRequest.getTitle(), movieRequest.getTrailerURL(),
-                movieRequest.getOriginalSourceUrl(), movieRequest.getCoverUrl(), movieRequest.getImdbld(),
-                movieRequest.getImdbScore(), movieRequest.getDescription(), movieRequest.getReleaseDate());
-        List<String> categories = movieRequest.getCategories();
-        List<Category> movieCategories = new ArrayList<>();
-        categories.forEach(category -> {
-            var addCategory = categoryService.findCategoryByName(category).map(category1 ->
-            movieCategories.add(category1));
-        });
-        newMovie.setCategories(movieCategories);
+    public ResponseEntity<Movie> addMovies(@RequestBody Movie movieRequest) {
         var val = movieService.findMovieByImdbld(movieRequest.getImdbld())
-                .orElse(movieService.saveMovie(newMovie));
+                .orElse(movieService.saveMovie(movieRequest));
         return ResponseEntity.ok(val);
     }
 
@@ -78,7 +66,7 @@ public class MovieController {
                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate,
                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate) {
 
-        List<Movie> allMovies = movieService.findAllMovies();
+        var allMovies = movieService.findAllMovies();
 
         List<Movie> filterMovies = allMovies
                 .stream()

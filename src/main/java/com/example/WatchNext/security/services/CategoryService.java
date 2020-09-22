@@ -1,7 +1,6 @@
 package com.example.WatchNext.security.services;
 
 import com.example.WatchNext.model.Category;
-import com.example.WatchNext.payload.request.CategoryRequest;
 
 import java.util.List;
 import java.util.Optional;

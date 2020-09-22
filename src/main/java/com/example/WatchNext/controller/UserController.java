@@ -45,7 +45,7 @@ public class UserController {
         Optional<User> val = authService.findUserByEmail(resetPasswordRequest.getEmail());
         val.ifPresentOrElse(
                 user -> {
-                    authService.resetPass(user);
+                    authService.resetPassword(user);
                     new ResponseEntity(HttpStatus.OK);
                 },
                 () -> new ResponseEntity(HttpStatus.BAD_REQUEST));

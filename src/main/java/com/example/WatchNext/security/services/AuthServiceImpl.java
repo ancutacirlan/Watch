@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void resetPass(User user) {
+    public void resetPassword(User user) {
             String password = generatePassword.generateRandomPassword();
             user.setPassword(encoder.encode(password));
             userRepository.save(user);

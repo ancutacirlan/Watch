@@ -1,8 +1,8 @@
 package com.example.WatchNext.security.services;
 
 import com.example.WatchNext.model.Movie;
-import com.example.WatchNext.payload.request.MovieRequest;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,5 +17,7 @@ public interface MovieService {
     Movie saveMovie(Movie movie);
 
     List<Movie> findAllMovies();
+
+    Optional<Movie> findMovieBetween(Date fromDate, Date toDate);
 
 }

@@ -1,7 +1,6 @@
 package com.example.WatchNext.security.services;
 
 import com.example.WatchNext.model.Category;
-import com.example.WatchNext.payload.request.CategoryRequest;
 import com.example.WatchNext.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

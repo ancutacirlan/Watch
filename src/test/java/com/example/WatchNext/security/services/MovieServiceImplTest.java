@@ -1,8 +1,6 @@
 package com.example.WatchNext.security.services;
 
-import com.example.WatchNext.model.Category;
 import com.example.WatchNext.model.Movie;
-import com.example.WatchNext.payload.request.MovieRequest;
 import com.example.WatchNext.repositories.CategoryRepository;
 import com.example.WatchNext.repositories.MovieRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,12 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,13 +36,13 @@ class MovieServiceImplTest {
     void deleteMovieById() {
         Movie movie = mock(Movie.class);
         movieService.deleteMovieById(movie.getId());
-        assertEquals(0,movieRepository.findAll().size());
+        assertEquals(0, movieRepository.findAll().size());
     }
 
     @Test
     void findMovieById() {
         Movie movie = mock(Movie.class);
-        movieRepository.deleteById(movie.getId());
+        when(movieRepository.findById(movie.getId())).thenReturn(Optional.of(movie));
         assertEquals(movie.getId(), movieService.findMovieById(movie.getId()).get().getId());
     }
 
@@ -54,7 +51,7 @@ class MovieServiceImplTest {
         Movie movie = mock(Movie.class);
         when(movieRepository.findByImdbld(movie.getImdbld())).thenReturn(Optional.of(movie));
         assertEquals(movie.getImdbld(),
-                movieService.findMovieByImdbld(movie.getImdbld()).get().getId());
+                movieService.findMovieByImdbld(movie.getImdbld()).get().getImdbld());
     }
 
     @Test

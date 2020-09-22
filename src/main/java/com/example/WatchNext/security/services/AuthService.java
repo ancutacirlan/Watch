@@ -13,7 +13,7 @@ public interface AuthService {
 
     Optional<User> findUserByEmail(String email);
 
-    void resetPass(User user);
+    void resetPassword(User user);
 
     String register(SignupRequest signupRequest);
 
