@@ -1,15 +1,17 @@
 package com.example.WatchNext.model;
 
+import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "role")
-public class Role {
+@Table(name = "category")
+public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,13 +19,10 @@ public class Role {
     private Long id;
 
     @Column(name = "name", unique = true, nullable = false)
+    @NotNull
     private String name;
 
-    @Column(name = "is_admin")
-    private Boolean isAdmin = false;
-
-    public Role(String name, Boolean isAdmin) {
+    public Category(String name) {
         this.name = name;
-        this.isAdmin = isAdmin;
     }
 }
